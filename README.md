@@ -98,6 +98,16 @@ Attributes
       <td><tt>false</tt></td>
       <td><tt>false</tt></td>
     </tr>
+    <tr>
+      <td>persist</td>
+      <td>if true, enable the persistence of data</td>
+      <td><tt>false</tt></td>
+    </tr>
+    <tr>
+      <td>repository_path</td>
+      <td>Path where Chef Zero will store data on disk in persist mode</td>
+      <td><tt>/var/lib/chef-zero</tt></td>
+    </tr>
   </tbody>
 </table>
 

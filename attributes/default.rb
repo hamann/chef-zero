@@ -40,3 +40,6 @@ default['chef-zero']['generate_real_keys'] = false
 
 # Set to true if you need persistence
 default['chef-zero']['persist'] = false
+
+# Define the filesystem path for storing persistent data
+default['chef-zero']['repository_path'] = '/var/lib/chef-zero'
