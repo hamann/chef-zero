@@ -28,13 +28,20 @@ chef_gem 'chef-zero' do
   only_if   { node['chef-zero']['install'] }
 end
 
+cookbook_file "#{ChefZeroCookbook::Helpers.bin_path}/chef-zero-persist" do
+  owner 'root'
+  group 'root'
+  mode '0755'
+  only_if { node['chef-zero']['persist'] }
+end
+
 template script do
   owner     'root'
   group     'root'
   mode      '0755'
   source    'init.erb'
   variables(
-    :command => ChefZeroCookbook::Helpers.command(node)
+    command: ChefZeroCookbook::Helpers.command(node)
   )
 end
 

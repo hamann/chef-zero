@@ -13,28 +13,37 @@ module ChefZeroCookbook
     def command(node)
       @node = node
 
-      cmd = "#{bin_path}/chef-zero"
+      if app['persist']
+        cmd = "#{bin_path}/chef-zero-persist"
+      else
+        cmd = "#{bin_path}/chef-zero"
+      end
+
       cmd << " --host #{app['host']}"
 
-      if app['listen'].to_i == 0
+      if app['listen'].to_i == 0 && !app['persist']
         cmd << " --socket #{app['listen']}"
       else
         cmd << " --port #{app['listen']}"
       end
 
-      cmd << " --generate-real-keys" if app['generate_real_keys']
-      cmd << " --daemon"
-
+      cmd << ' --generate-real-keys' if app['generate_real_keys']
+      cmd << ' --daemon'
       cmd
     end
 
-    private
-      def bin_path
-        File.expand_path(File.join(node['chef_packages']['chef']['chef_root'], '..', '..', '..', '..', '..', '..', '..', 'bin'))
-      end
+    def bin_path
+      File.expand_path(File.join(
+        node['chef_packages']['chef']['chef_root'],
+        '..', '..', '..',
+        '..', '..', '..', '..', 'bin')
+      )
+    end
 
-      def app
-        node['chef-zero']
-      end
+    private
+
+    def app
+      node['chef-zero']
+    end
   end
 end

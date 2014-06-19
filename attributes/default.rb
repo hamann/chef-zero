@@ -37,3 +37,6 @@ default['chef-zero']['listen'] = '80'
 
 # Set to true if the server should generate real keys
 default['chef-zero']['generate_real_keys'] = false
+
+# Set to true if you need persistence
+default['chef-zero']['persist'] = false

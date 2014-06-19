@@ -1,0 +1,63 @@
+require 'chef/config'
+require 'chef/chef_fs/chef_fs_data_store'
+require 'chef/chef_fs/config'
+require 'chef_zero/server'
+require 'optparse'
+
+server_opts = {
+  host: '127.0.0.1',
+  port: 8889,
+  generate_real_keys: false,
+  data_store: ''
+}
+
+daemon_mode = false
+
+OptionParser.new do |opts|
+  opts.banner = 'Usage: chef-zero-persist [options]'
+
+  opts.on('-h', '--host [address]', 'Bind address') do |address|
+    server_opts[:host] = address
+  end
+
+  opts.on('-p', '--port [N]', Integer, 'Listen Port N') do |n|
+    server_opts[:port] = n
+  end
+
+  opts.on('-g', '--generate-real-keys', 'Generate real keys') do |v|
+    server_opts[:generate_real_keys] = v
+  end
+
+  opts.on('-r', '--repository DIR', 'Use DIR as repository') do |dir|
+    Chef::Config.chef_repo_path = dir
+    server_opts[:data_store] = Chef::ChefFS::ChefFSDataStore.new(
+      Chef::ChefFS::Config.new(Chef::Config).local_fs
+    )
+  end
+
+  opts.on_tail('-h', '--help', 'Show this message') do
+    puts opts
+    exit
+  end
+
+  opts.on('-d', '--[no-]daemon', 'Start or not in background') do |v|
+    daemon_mode = true
+  end
+
+end.parse!
+
+if server_opts[:data_store] == ''
+  Chef::Config.chef_repo_path = '.'
+  server_opts[:data_store] = Chef::ChefFS::ChefFSDataStore.new(
+    Chef::ChefFS::Config.new(Chef::Config).local_fs
+  )
+end
+
+Chef::Log.info('Starting Chef Zero server in background')
+server = ChefZero::Server.new(server_opts)
+
+if daemon_mode
+  server.start_background
+else
+  server.start
+end
