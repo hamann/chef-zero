@@ -20,3 +20,11 @@ suites:
     chef-zero:
       install: true
       start: true
+      
+- name: persist
+  run_list: ['recipe[chef-zero]']
+  attributes:
+    chef-zero:
+      install: true
+      start: true
+      persist: true
