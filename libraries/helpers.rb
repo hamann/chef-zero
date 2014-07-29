@@ -17,7 +17,7 @@ module ChefZeroCookbook
         cmd = "#{bin_path}/chef-zero-persist"
       else
         cmd = "#{bin_path}/chef-zero"
-        cmd << "--repository #{app['repository_path']}"
+        cmd << " --repository #{app['repository_path']}"
       end
 
       cmd << " --host #{app['host']}"
