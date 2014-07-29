@@ -41,6 +41,11 @@ cookbook_file "#{bin_path}/chef-zero-persist" do
   only_if { node['chef-zero']['persist'] }
 end
 
+directory node['chef-zero']['repository_path'] do
+  recursive true
+  only_if { node['chef-zero']['persist'] }
+end
+
 template script do
   owner     'root'
   group     'root'
