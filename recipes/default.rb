@@ -28,7 +28,13 @@ chef_gem 'chef-zero' do
   only_if   { node['chef-zero']['install'] }
 end
 
-cookbook_file "#{ChefZeroCookbook::Helpers.bin_path}/chef-zero-persist" do
+bin_path = File.expand_path(File.join(
+  node['chef_packages']['chef']['chef_root'],
+  '..', '..', '..',
+  '..', '..', '..', '..', 'bin')
+)
+
+cookbook_file "#{bin_path}/chef-zero-persist" do
   owner 'root'
   group 'root'
   mode '0755'
