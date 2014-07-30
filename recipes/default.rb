@@ -46,9 +46,9 @@ directory node['chef-zero']['repository_path'] do
 end
 
 runit_service node['chef-zero']['daemon'] do
-  run_template_name 'sv-cz-run.erb'
-  log_template_name 'sv-cz-log.erb'
-  options({ command: ChefZeroCookbook::Herlpers.command(node)})
+  run_template_name 'cz'
+  log_template_name 'cz'
+  options({ command: ChefZeroCookbook::Helpers.command(node)})
   action [:enable, :start]
   only_if { node['chef-zero']['start'] }
 end
