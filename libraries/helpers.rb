@@ -15,7 +15,6 @@ module ChefZeroCookbook
 
       if app['persist']
         cmd = "#{bin_path}/../embedded/bin/ruby  #{bin_path}/chef-zero-persist"
-        cmd << " -- "
         cmd << " --repository #{app['repository_path']}"
       else
         cmd = "#{bin_path}/chef-zero"
