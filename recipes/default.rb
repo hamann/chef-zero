@@ -19,8 +19,7 @@
 #
 
 include_recipe 'build-essential'
-
-script = "/etc/init.d/#{node['chef-zero']['daemon']}"
+include_recipe 'runit'
 
 # This is a chef_gem because we actually want to run this from inside Chef
 chef_gem 'chef-zero' do
@@ -46,21 +45,10 @@ directory node['chef-zero']['repository_path'] do
   only_if { node['chef-zero']['persist'] }
 end
 
-template script do
-  owner     'root'
-  group     'root'
-  mode      '0755'
-  source    'init.erb'
-  variables(
-    command: ChefZeroCookbook::Helpers.command(node)
-  )
-end
-
-service node['chef-zero']['daemon'] do
-  supports          [:start, :stop, :restart]
-  start_command     "#{script} start"
-  stop_command      "#{script} stop"
-  restart_command   "#{script} restart"
-  action            [:enable, :start]
-  only_if           { node['chef-zero']['start'] }
+runit_service node['chef-zero']['daemon'] do
+  run_template_name 'sv-cz-run.erb'
+  log_template_name 'sv-cz-log.erb'
+  options({ command: ChefZeroCookbook::Herlpers.command(node)})
+  action [:enable, :start]
+  only_if { node['chef-zero']['start'] }
 end

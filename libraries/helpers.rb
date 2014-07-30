@@ -30,7 +30,6 @@ module ChefZeroCookbook
       end
 
       cmd << ' --generate-real-keys' if app['generate_real_keys']
-      cmd << ' --daemon'
       cmd
     end
 
